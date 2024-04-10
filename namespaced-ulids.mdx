@@ -1,0 +1,67 @@
+---
+title: Using namespaced ULIDs for unique identifiers
+description: ULIDs are a great way to generate unique identifiers for your applications. By namespacing them, you can create unique IDs for different entities in your system.
+tags: ["developer-experience", "snippets", "ulid"]
+isFeatured: false
+time: 9/4/2024
+image: https://images.unsplash.com/photo-1592609931095-54a2168ae893?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+I've got something cool to share from my current job. At NaranjaX, we've been cooking up a project called "Kausanna," aimed at tackling chargeback processing for credit cards. It's been an interesting journey, and along the way, we made a decision that I think could spark some neat discussions: opting for namespaced ULIDs over the traditional UUIDs.
+
+### Why ULIDs Rock
+
+First off, let's talk about why we even thought about ditching UUIDs. While they've been a staple for generating unique identifiers, they're not without their quirks. Here’s the lowdown:
+
+- **Character Efficiency**: UUIDs aren't exactly the poster child for compact encoding of 128 bits of randomness.
+- **Version Hassles**: With v1/v2 leaning heavily on MAC addresses, they’re not the most portable. And let's not get started on v3/v5's dependency on unique seeds and the randomness fest that is v4. Each comes with its own brand of fragmentation headaches in data structures.
+- **Just Random**: Pure randomness without additional info? Thanks, v4, but sometimes we crave a bit more.
+
+Enter ULIDs – our chosen heroes. They’re not just shorter and easier on the eyes; they offer the superpower of lexicographical sorting. Imagine the convenience in your databases!
+
+### Namespaced ULIDs: The How and Why
+
+Our twist was to create "namespaced ULIDs" for the Kausanna project. The gist? We generate ULIDs with a pinch of context, assigning prefixes based on their use case. Picture this: a new product ID starts with "prod*" and an API key with "key*". It’s not just about uniqueness but also about adding a layer of identifiable context to the ID.
+
+Here's a snippet to show how we're spinning this magic:
+
+```typescript
+import { ulid } from "ulidx";
+
+const namespaces = {
+  product: "prod",
+  apiKey: "key",
+};
+
+export function namespacedUlid(namespace: keyof typeof namespaces) {
+  const mappedNamespace = namespaces[namespace];
+  if (!namespace)
+    throw new Error(`Namespace "${namespace}" is not mapped for generation.`);
+  return `${mappedNamespace}_${ulid()}`;
+}
+
+namespacedUlid("apiKey");
+```
+
+This approach ensures that every ID generated is not just unique but also immediately tells you something about the entity it represents. It’s like giving your IDs a brief intro about themselves before they dive into your database parties. 🎉
+
+### The Benefits of Namespaced ULIDs
+
+- **Readability**: No more deciphering what "f81d4fae-7dec-11d0-a765-00a0c91e6bf6" stands for. With namespaced ULIDs, you get a quick peek into the entity type.
+- **Sorting**: The lexicographical sorting feature of ULIDs is a game-changer. It’s like having your database entries auto-sorted by entity type.
+- **Contextual Clarity**: The prefix gives you a quick idea of what the ID represents. It’s like a mini cheat sheet for your data. Clients and developers alike will thank you.
+- **Easy Debugging**: When you’re sifting through logs or debugging, the context in the ID can be a lifesaver.
+- **Consistency**: With a set of predefined namespaces, you ensure that IDs are generated in a consistent format across your system.
+- **Easy copy-pasting**: No more squinting at long, random strings. Namespaced ULIDs are easier to read and copy-paste.
+
+### Wrapping Up
+
+Implementing namespaced ULIDs has been a game-changer for us. It's streamlined our processes, made our data more readable, and added an efficient sorting mechanism. For any of you embarking on projects where ID generation becomes central, considering a leap from UUID to ULID, especially with a namespaced twist, might just be the workflow upgrade you’re looking for.
+
+Let's keep the code flowing and the IDs meaningful. Until next time, happy coding!
+
+## Resources
+
+- [ULID Spec](https://github.com/ulid/spec)
+- [ulid JavaScript Library](https://npmjs.com/package/ulid)
+- [ulidx JavaScript Library](https://npmjs.com/package/ulidx)

@@ -1,0 +1,40 @@
+---
+title: Trying out SST - A Developer’s Perspective
+description: Exploring the SST Serverless Framework - A Developer’s Perspective
+tags: ["development", "sst", "serverless", "aws"]
+isFeatured: false
+time: 9/4/2024
+image: https://images.unsplash.com/photo-1604964432806-254d07c11f32?q=80&w=2448&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+In the ever-evolving landscape of serverless architecture, developers are constantly on the lookout for frameworks that can enhance productivity and streamline the development process. One such tool that has recently caught my attention is the SST (Serverless Stack) framework, which I’ve had the pleasure of exploring. Here’s my take on what makes SST stand out, as well as some areas where it could potentially improve.
+
+### What Sets SST Apart
+
+**Instant Deployment for Development**: One of the most appealing features of SST is its ability to instantly deploy and test in a development environment. This rapid feedback loop significantly accelerates the development process, allowing for immediate testing and iteration.
+
+**Inbuilt Developer Stacks**: SST shines with its support for custom developer stacks. This feature is a game-changer, enabling developers to work on their tasks independently, without stepping on each other's toes. It promotes a more organized and efficient development workflow, catering to the specific needs of each developer.
+
+**Strong Typing with Exceptions**: The framework’s strong typing, with a few exceptions, is largely beneficial. However, when integrating custom-made configurations for CDK (Cloud Development Kit), some typings may be lost, leading to errors at build time. While this can introduce some challenges, the overall strong typing approach is advantageous for code quality and maintainability.
+
+**Clean CLI Output**: SST provides a clean and understandable command-line interface output, which greatly helps in monitoring the deployment process and debugging.
+
+**Resource Binding/Linking**: A standout feature of SST is its resource binding/linking capability. Unlike other frameworks, SST allows developers to easily reference resources within their stack, such as SQS queues, by simply linking the resource. This not only enhances code readability but also streamlines the development process.
+
+```javascript
+import { Resource } from "sst";
+
+console.log(Resource.MyBucket.name);
+```
+
+**Enforced Project Structure**: SST encourages a clean project structure with clearly separated responsibilities. It supports a monorepo approach, with distinct folders for stack resources and functions, which promotes better organization and scalability.
+
+### Areas for Improvement
+
+**Limited to AWS**: Currently, SST is tailored exclusively for AWS, which might be limiting for teams looking to deploy across multiple cloud vendors. Broadening its support to include other providers, as seen with the Serverless Framework, could enhance its versatility.
+
+**Handling of Secrets**: While SST provides capabilities for managing secrets, its approach, especially when compared to the direct integration with AWS Secrets Manager offered by the Serverless Framework, can feel a bit unconventional. Streamlining this aspect could simplify secret management for developers.
+
+### Conclusion
+
+The SST Serverless Framework offers a compelling set of features that cater well to the needs of serverless application developers. Its emphasis on rapid deployment, strong typing, and resource binding, paired with a structured project organization, provides a solid foundation for developing robust serverless applications. However, embracing a broader range of cloud providers and refining secret management could elevate SST to new heights, making it an even more attractive choice for developers navigating the serverless landscape.
