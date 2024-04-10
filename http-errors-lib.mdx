@@ -1,0 +1,103 @@
+---
+title: Library for Handling HTTP Errors in Node.js
+description: Learn how to handle HTTP errors in Node.js using the http-errors library. Understand the basics, installation, and usage of the library.
+tags: ["nodejs", "http", "errors", "http-errors"]
+isFeatured: false
+time: 10/4/2024
+image: https://images.unsplash.com/photo-1556139930-c23fa4a4f934?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+Handling HTTP errors in Node.js can be a bit tricky, especially when you're dealing with different status codes and error messages. The `@ezee/http-errors` library is a handy tool that I created, that simplifies this process by providing a set of utility functions to create HTTP errors with ease.
+
+### Why Use `@ezee/http-errors`
+
+- **Simplicity**: The library is designed to be simple and easy to use. You can create HTTP errors with just a single line of code.
+- **Customization**: You can customize the error messages and status codes according to your requirements.
+- **Consistency**: By using this library, you ensure that your error messages are consistent across your application.
+- **Extra Metadata**: You can attach additional metadata to the error objects for better debugging and logging.
+
+### Installation
+
+You can install the `@ezee/http-errors` library using npm or yarn:
+
+```bash
+npm install @ezee/http-errors
+
+# using pnpm
+pnpm install @ezee/http-errors
+
+# using yarn
+yarn add @ezee/http-errors
+```
+
+### Usage
+
+Here's how you can use the library to create HTTP errors in your Node.js application:
+
+```typescript
+import httpErrors from "@ezee/http-errors";
+
+// Create a 404 Not Found error
+new httpErrors.NotFound({
+  message: "Resource not found",
+  code: "RESOURCE_NOT_FOUND",
+  meta: {
+    resource: "user",
+    id: 123,
+  },
+});
+```
+
+That will build an error object with the following structure:
+
+```json
+{
+  "name": "NotFound",
+  "message": "Resource not found",
+  "status": 404,
+  "code": "RESOURCE_NOT_FOUND",
+  "meta": {
+    "resource": "user",
+    "id": 123
+  }
+}
+```
+
+### Example usage with Express
+
+```typescript
+import express from "express";
+import httpErrors from "@ezee/http-errors";
+
+const app = express();
+
+app.get("/user/:id", (req, res, next) => {
+  const { id } = req.params;
+
+  if (id !== "123") {
+    return next(
+      new httpErrors.Notfound({
+        message: "User not found",
+        code: "USER_NOT_FOUND",
+        meta: {
+          userId: id,
+        },
+      }),
+    );
+  }
+
+  res.json({ id, name: "John Doe" });
+});
+```
+
+### Conclusion
+
+This library is a useful tool for handling HTTP errors in Node.js applications. It simplifies the process of creating error objects and provides a consistent way to manage errors across your application. Give it a try in your next project and see how it can help you manage HTTP errors more effectively.
+If you have any questions or feedback, feel free to reach out to me on [GitHub](https://github.com/byeze/http-errors).
+
+Happy coding! 🚀
+
+### Resources
+
+- [GitHub Repository](https://github.com/byeze/http-errors).
+- [NPM Package](https://www.npmjs.com/package/@ezee/http-errors).
